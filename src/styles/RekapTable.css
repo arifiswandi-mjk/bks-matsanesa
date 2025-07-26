@@ -1,0 +1,94 @@
+.rekap-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Arial, sans-serif;
+}
+
+.rekap-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.rekap-filters label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.rekap-filters select,
+.rekap-filters input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 160px;
+}
+
+.export-button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.export-button:hover {
+  background-color: #218838;
+}
+
+.rekap-table-container {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.rekap-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rekap-table th,
+.rekap-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.rekap-table th {
+  background-color: #f1f1f1;
+}
+
+.rekap-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.detail-button {
+  background-color: #007bff;
+  border: none;
+  padding: 4px 10px;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.detail-button:hover {
+  background-color: #0056b3;
+}
+
+@media screen and (max-width: 600px) {
+  .rekap-filters {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

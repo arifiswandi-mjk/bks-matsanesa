@@ -1,0 +1,133 @@
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.filter-select,
+.filter-input {
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #bdbdbd;
+  font-size: 1rem;
+  background: #f8fafc;
+  min-width: 120px;
+  transition: border 0.2s;
+}
+.filter-input {
+  min-width: 180px;
+}
+.filter-select:focus,
+.filter-input:focus {
+  border: 1.5px solid #1976d2;
+  outline: none;
+  background: #fff;
+}
+@media (max-width: 700px) {
+  .filter-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .filter-input,
+  .filter-select {
+    min-width: 0;
+    width: 100%;
+  }
+}
+.aksi-btn-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+}
+.pelanggaran-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.07);
+  margin-bottom: 1.5rem;
+}
+.pelanggaran-table {
+  min-width: 800px;
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+.pelanggaran-table thead {
+  background: #f1f5f9;
+}
+.pelanggaran-table th,
+.pelanggaran-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  font-size: 1rem;
+}
+.pelanggaran-table th {
+  font-weight: 700;
+  color: #1a237e;
+  background: #f1f5f9;
+}
+.pelanggaran-table td {
+  color: #333;
+  background: #fff;
+}
+.pelanggaran-table tr:hover td {
+  background: #e3f2fd;
+  transition: background 0.2s;
+}
+.pelanggaran-table .aksi-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  margin: 0 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pelanggaran-table .aksi-btn.detail {
+  background: #1976d2;
+  color: #fff;
+}
+.pelanggaran-table .aksi-btn.detail:hover {
+  background: #0d47a1;
+}
+.pelanggaran-table .aksi-btn.edit {
+  background: #ffc107;
+  color: #fff;
+}
+.pelanggaran-table .aksi-btn.edit:hover {
+  background: #ff9800;
+}
+.pelanggaran-table .aksi-btn.delete {
+  background: #e53935;
+  color: #fff;
+}
+.pelanggaran-table .aksi-btn.delete:hover {
+  background: #b71c1c;
+}
+.pelanggaran-table .empty-row td {
+  text-align: center;
+  color: #888;
+  padding: 2rem 0;
+  background: #f8fafc;
+}
+@media (max-width: 900px) {
+  .pelanggaran-table {
+    min-width: 600px;
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 600px) {
+  .pelanggaran-table {
+    min-width: 400px;
+    font-size: 0.9rem;
+  }
+  .pelanggaran-table th,
+  .pelanggaran-table td {
+    padding: 0.4rem 0.3rem;
+  }
+}

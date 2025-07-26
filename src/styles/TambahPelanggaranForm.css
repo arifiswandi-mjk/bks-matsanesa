@@ -1,0 +1,86 @@
+.tambah-pelanggaran-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  transition: box-shadow 0.2s;
+}
+.tambah-pelanggaran-form .tanggal-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.tambah-pelanggaran-form .radio-label {
+  font-weight: 400;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+.tambah-pelanggaran-form .label {
+  font-weight: 600;
+  font-size: 1rem;
+  min-width: 90px;
+  color: #333;
+  margin-right: 0.5rem;
+}
+.tambah-pelanggaran-form input[type='datetime-local'],
+.tambah-pelanggaran-form select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+  transition: border 0.2s;
+  background: #f8f9fa;
+}
+.tambah-pelanggaran-form .row-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.tambah-pelanggaran-form .input-col {
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.tambah-pelanggaran-form button {
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.07);
+  transition: background 0.2s;
+}
+@media (max-width: 700px) {
+  .tambah-pelanggaran-form {
+    padding: 1rem;
+    max-width: 100%;
+  }
+  .tambah-pelanggaran-form .row-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .tambah-pelanggaran-form .input-col {
+    min-width: 100%;
+  }
+}

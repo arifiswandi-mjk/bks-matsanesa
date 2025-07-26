@@ -1,0 +1,244 @@
+function doPost(e) {
+  const req = JSON.parse(e.postData.contents);
+  const action = req.action;
+  const data = req.data || {};
+
+  const actions = {
+    login,
+    createPelanggaran,
+    readPelanggaran,
+    deletePelanggaran,
+    updatePelanggaran,
+    readSiswa,
+    createJenis,
+    readJenis,
+    deleteJenis,
+    rekapPelanggaran,
+    readPelanggaranByNisn // ✅ fungsi baru
+  };
+// Update data pelanggaran berdasarkan ID
+function updatePelanggaran(data) {
+  if (!data.id) return { success: false, error: 'ID kosong' };
+  const sheet = getSheet("Pelanggaran");
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === data.id) {
+      // Update kolom: [1]Tanggal, [2]NISN, [3]Nama, [4]Kelas, [5]Pelanggaran, [6]Skor
+      // Ambil data siswa dari sheet "Siswa"
+      const siswaSheet = getSheet("Siswa");
+      const siswaRows = siswaSheet.getDataRange().getValues().slice(1); // skip header
+      const siswaData = Object.fromEntries(siswaRows.map(s => [s[1], s[0]])); // { Nama: Nisn }
+      const nisn = siswaData[data.nama] || rows[i][2];
+
+      // Ambil data jenis pelanggaran dan skor
+      const jenisSheet = getSheet("Jenis");
+      const jenisRows = jenisSheet.getDataRange().getValues().slice(1);
+      const jenisData = Object.fromEntries(jenisRows.map(r => [r[1], r[2]]));
+      const skor = jenisData[data.pelanggaran] || rows[i][6];
+
+      // Update kolom
+      sheet.getRange(i+1, 2).setValue(data.tanggal || rows[i][1]); // Tanggal
+      sheet.getRange(i+1, 3).setValue(nisn); // NISN
+      sheet.getRange(i+1, 4).setValue(data.nama || rows[i][3]); // Nama
+      sheet.getRange(i+1, 5).setValue(data.kelas || rows[i][4]); // Kelas
+      sheet.getRange(i+1, 6).setValue(data.pelanggaran || rows[i][5]); // Pelanggaran
+      sheet.getRange(i+1, 7).setValue(skor); // Skor
+      // pencatat dan userID tidak diubah
+      return { success: true };
+    }
+  }
+  return { success: false, error: 'Data tidak ditemukan' };
+}
+
+  if (actions[action]) {
+    return ContentService.createTextOutput(JSON.stringify(actions[action](data)))
+      .setMimeType(ContentService.MimeType.JSON);
+  } else {
+    return ContentService.createTextOutput(JSON.stringify({ error: 'Aksi tidak valid' }));
+  }
+}
+
+function getSheet(name) {
+  return SpreadsheetApp.getActive().getSheetByName(name);
+}
+
+function login(data) {
+  const sheet = getSheet("Users");
+  const users = sheet.getDataRange().getValues();
+  for (let i = 1; i < users.length; i++) {
+    if (users[i][1] === data.username && users[i][2] === data.password) {
+      return {
+        success: true,
+        userID: users[i][0],
+        username: users[i][1],
+        name: users[i][3]
+      };
+    }
+  }
+  return { success: false };
+}
+
+function createPelanggaran(data) {
+  // Ambil data siswa dari sheet "Siswa"
+  const siswaSheet = getSheet("Siswa");
+  const siswaRows = siswaSheet.getDataRange().getValues().slice(1); // skip header
+  const siswaData = Object.fromEntries(siswaRows.map(s => [s[1], s[0]])); // { Nama: Nisn }
+
+  const nisn = siswaData[data.nama] || 0;
+
+  // Ambil data jenis pelanggaran dan skor
+  const jenisSheet = getSheet("Jenis");
+  const jenisRows = jenisSheet.getDataRange().getValues().slice(1);
+  const jenisData = Object.fromEntries(jenisRows.map(r => [r[1], r[2]]));
+
+  const skor = jenisData[data.pelanggaran] || 0;
+
+  // Simpan ke sheet "Pelanggaran"
+  const sheet = getSheet("Pelanggaran");
+  const id = Utilities.getUuid();
+  let tanggal = new Date();
+  if (data.tanggal) { tanggal = data.tanggal };
+  sheet.appendRow([
+    id,                // 0
+    tanggal,      // new Date(),        // 1
+    nisn,              // 2
+    data.nama,         // 3
+    data.kelas,        // 4
+    data.pelanggaran,  // 5
+    skor,              // 6
+    data.pencatat,     // 7
+    data.userID        // 8
+  ]);
+
+  return { success: true };
+}
+
+function readPelanggaran(data) {
+  if (!data.userID) return { error: "userID kosong" };
+
+  const sheet = getSheet("Pelanggaran");
+  const rows = sheet.getDataRange().getValues();
+  const result = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    // if (rows[i][8] == data.userID) {
+    result.push({
+      ID: rows[i][0],
+      Timestamp: Utilities.formatDate(new Date(rows[i][1]), Session.getScriptTimeZone(), 'dd-MM-yyyy HH:mm:ss'),
+      "Nisn": rows[i][2],
+      "Nama Siswa": rows[i][3],
+      "Kelas": rows[i][4],
+      "Pelanggaran": rows[i][5],
+      "Skor": rows[i][6],
+      "Pencatat": rows[i][7]
+    });
+    // }
+  }
+
+  result.sort((a, b) => new Date(b["Timestamp"]) - new Date(a["Timestamp"]));
+  return result;
+}
+
+function readPelanggaranByNisn(data) {
+  if (!data.nisn) return { error: "NISN kosong" };
+
+  const sheet = getSheet("Pelanggaran");
+  const rows = sheet.getDataRange().getValues();
+  const result = [];
+
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][2] == data.nisn) { // Kolom 2 = NISN
+      result.push({
+        ID: rows[i][0],
+        Timestamp: Utilities.formatDate(new Date(rows[i][1]), Session.getScriptTimeZone(), 'dd-MM-yyyy HH:mm:ss'),
+        "Nisn": rows[i][2],
+        "Nama Siswa": rows[i][3],
+        "Kelas": rows[i][4],
+        "Pelanggaran": rows[i][5],
+        "Skor": rows[i][6],
+        "Pencatat": rows[i][7]
+      });
+    }
+  }
+
+  result.sort((a, b) => new Date(b["Timestamp"]) - new Date(a["Timestamp"]));
+  return result;
+}
+
+function deletePelanggaran(data) {
+  const sheet = getSheet("Pelanggaran");
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === data.id && rows[i][8] == data.userID) {
+      sheet.deleteRow(i + 1);
+      return { success: true };
+    }
+  }
+  return { success: false };
+}
+
+function readSiswa() {
+  const sheet = SpreadsheetApp.getActive().getSheetByName('Siswa');
+  const data = sheet.getDataRange().getValues();
+  data.shift(); // buang header
+  return data.map(row => ({
+    Nisn: row[0],
+    Nama: row[1],
+    Kelas: row[2]
+  }));
+}
+
+function createJenis(data) {
+  const sheet = getSheet("Jenis");
+  const id = Utilities.getUuid();
+  sheet.appendRow([id, data.nama, data.skor]);
+  return { success: true };
+}
+
+function readJenis() {
+  const sheet = getSheet("Jenis");
+  const rows = sheet.getDataRange().getValues();
+  return rows.slice(1).map(r => ({
+    ID: r[0],
+    Nama: r[1],
+    Skor: r[2]
+  }));
+}
+
+function deleteJenis(data) {
+  const sheet = getSheet("Jenis");
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] === data.id) {
+      sheet.deleteRow(i + 1);
+      return { success: true };
+    }
+  }
+  return { success: false };
+}
+
+function rekapPelanggaran() {
+  const sheet = getSheet("Pelanggaran");
+  const rows = sheet.getDataRange().getValues();
+  const map = {};
+
+  for (let i = 1; i < rows.length; i++) {
+    const nisn = rows[i][2];
+    const nama = rows[i][3];
+    const kelas = rows[i][4];
+    const skor = Number(rows[i][6]) || 0;
+    const key = `${nisn}||${nama}||${kelas}`;
+    if (!map[key]) map[key] = 0;
+    map[key] += skor;
+  }
+
+  return Object.entries(map).map(([k, total]) => {
+    const [nisn, nama, kelas] = k.split('||');
+    return {
+      Nisn: nisn,
+      Nama: nama,
+      Kelas: kelas,
+      Total: total
+    };
+  });
+}
