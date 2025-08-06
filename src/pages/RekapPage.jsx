@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import RekapTable from '../components/RekapTable';
-import SiswaDetailPage from './SiswaDetailPage';
+import '../styles/RekapPage.css'; // Import CSS eksternal
 
 const API = import.meta.env.VITE_API_URL;
 
 function RekapPage() {
   const [rekap, setRekap] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [nisnTerpilih, setNisnTerpilih] = useState(null); // tombol detail
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [kelasFilter, setKelasFilter] = useState('');
+  
+  // Fungsi untuk kembali ke halaman sebelumnya
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -35,21 +43,75 @@ function RekapPage() {
     fetchData();
   }, []);
 
-  if (nisnTerpilih) {
-    return <SiswaDetailPage nisn={nisnTerpilih} onBack={() => setNisnTerpilih(null)} />;
-  }
+  // Fungsi untuk navigasi ke halaman detail siswa
+  const handleSelectSiswa = (nisn) => {
+    navigate(`/siswa/${nisn}`);
+  };
+
+  // Ekstrak daftar kelas unik untuk filter
+  const kelasList = [...new Set(rekap.map(item => item.Kelas))].sort();
+
+  // Filter data berdasarkan pencarian dan filter kelas
+  const filteredData = rekap.filter(item => {
+    return (
+      (searchTerm === '' || 
+       item.Nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       item.Nisn.includes(searchTerm)) &&
+      (kelasFilter === '' || item.Kelas === kelasFilter)
+    );
+  });
 
   return (
-    <div className="p-4 max-w-4xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Rekap Skor Pelanggaran Siswa</h2>
+    <div className="rekap-container">
+      {/* Pisahkan tombol kembali dari judul */}
+      <div className="back-button-container">
+        <button onClick={handleBack} className="back-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Kembali
+        </button>
+      </div>
+      
+      {/* Pindahkan judul ke bawah tombol */}
+      <h2 className="page-title">Rekap Skor Pelanggaran Siswa</h2>
+
+      {!loading && (
+        <div className="search-filter">
+          <input
+            type="text"
+            placeholder="Cari nama atau NISN..."
+            className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          
+          <select 
+            className="filter-select"
+            value={kelasFilter}
+            onChange={(e) => setKelasFilter(e.target.value)}
+          >
+            <option value="">Semua Kelas</option>
+            {kelasList.map(kelas => (
+              <option key={kelas} value={kelas}>{kelas}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {loading ? (
-        <p>⏳ Memuat data...</p>
+        <div className="loading-message">⏳ Memuat data...</div>
       ) : rekap.length === 0 ? (
-        <p className="text-gray-500">Tidak ada data rekap pelanggaran.</p>
+        <div className="empty-message">Tidak ada data rekap pelanggaran.</div>
+      ) : filteredData.length === 0 ? (
+        <div className="empty-message">Tidak ditemukan data yang sesuai dengan pencarian.</div>
       ) : (
-        <div className="overflow-x-auto mt-4">
-          <RekapTable data={rekap} onSelectSiswa={nisn => setNisnTerpilih(nisn)} />
+        <div className="rekap-table-container">
+          <RekapTable 
+            data={filteredData} 
+            onSelectSiswa={handleSelectSiswa}
+            className="rekap-table"
+          />
         </div>
       )}
     </div>

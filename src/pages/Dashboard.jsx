@@ -62,7 +62,7 @@ function Dashboard() {
     } finally {
       setLoadingPage(false);
     }
-  },[muatPelanggaran]);
+  }, [muatPelanggaran]);
 
   useEffect(() => {
     if (userID) {
@@ -236,7 +236,7 @@ function Dashboard() {
   if (loadingPage) {
     return (
       <div className="loading-screen">
-        <h2>⏳ Memuat data, mohon tunggu...</h2>
+        <h2>⏳ Memuat data ...</h2>
       </div>
     );
   }
@@ -274,18 +274,6 @@ function Dashboard() {
         onCancelEdit={cancelEdit}
       />
 
-      <div className="table-container">
-        <PelanggaranTabel
-          data={pelanggaranList}
-          onSelectSiswa={nisn => setNisnTerpilih(nisn)}
-          onEdit={item => {
-            setDataForm(item);
-            setModeEdit(true);
-          }}
-          onDelete={id => handleDelete(id)}
-        />
-      </div>
-
       <div className="button-group">
         <button onClick={() => navigate('/rekap')} className="button-yellow">
           Lihat Rekap Skor
@@ -293,6 +281,18 @@ function Dashboard() {
         <button onClick={() => navigate('/grafik')} className="button-blue">
           Lihat Grafik Pelanggaran
         </button>
+      </div>
+
+      <div className="table-container">
+        <PelanggaranTabel
+          data={pelanggaranList}
+          onSelectSiswa={nisn => navigate(`/siswa/${nisn}`)}
+          onEdit={item => {
+            setDataForm(item);
+            setModeEdit(true);
+          }}
+          onDelete={id => handleDelete(id)}
+        />
       </div>
     </div>
   );

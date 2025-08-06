@@ -1,10 +1,8 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import '../styles/RekapTable.css'; // Atau "../styles/RekapTable.css" jika Anda pisahkan
 
 function RekapTable({ data, onSelectSiswa }) {
-  const navigate = useNavigate();
   const [selectedKelas, setSelectedKelas] = useState('');
   const [searchNama, setSearchNama] = useState('');
 
@@ -72,10 +70,10 @@ function RekapTable({ data, onSelectSiswa }) {
           <thead>
             <tr>
               <th>No</th>
-              <th>NISN</th>
               <th>Nama</th>
+              <th>NISN</th>
               <th>Kelas</th>
-              <th>Total Skor</th>
+              <th className="skor-column">Total Skor</th>
               <th>Aksi</th>
             </tr>
           </thead>
@@ -88,16 +86,13 @@ function RekapTable({ data, onSelectSiswa }) {
               filteredData.map((item, index) => (
                 <tr key={item.Nisn ?? `row-${index}`}>
                   <td>{index + 1}</td>
-                  <td>{item.Nisn}</td>
                   <td>{item.Nama}</td>
+                  <td>{item.Nisn}</td>
                   <td>{item.Kelas}</td>
-                  <td>{item.Total}</td>
+                  <td className="skor-column">{item.Total}</td>
                   <td>
                     <button
                       onClick={() => onSelectSiswa(item.Nisn)}
-                      // onClick={() =>
-                      //   navigate(`/siswa/${encodeURIComponent(item.Nisn)}`)
-                      // }
                       className="detail-button"
                     >
                       Detail

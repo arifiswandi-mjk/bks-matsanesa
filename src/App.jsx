@@ -3,7 +3,7 @@
 // import viteLogo from '/vite.svg'
 // import './App.css'
 
-import React, { lazy } from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -17,14 +17,16 @@ import SiswaDetailPage from './pages/SiswaDetailPage';
 function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/rekap" element={<RekapPage />} />
-        <Route path="/jenis" element={<JenisPage />} />
-        <Route path="/grafik" element={<GrafikPage />} />
-        <Route path="/siswa/:id" element={<SiswaDetailPage />} />
-      </Routes>
+      <Suspense fallback={<div className="loading-screen">⏳ Memuat...</div>}>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/rekap" element={<RekapPage />} />
+          <Route path="/jenis" element={<JenisPage />} />
+          <Route path="/grafik" element={<GrafikPage />} />
+          <Route path="/siswa/:id" element={<SiswaDetailPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

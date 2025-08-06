@@ -1,9 +1,10 @@
 import React from 'react';
 import '../styles/PelanggaranTable.css';
 
-function PelanggaranTabel({ data, onSelectSiswa, onEdit, onDelete }) {
+function PelanggaranTabel({ data, onSelectSiswa, onEdit }) {
   const [filterKelas, setFilterKelas] = React.useState('');
   const [searchNama, setSearchNama] = React.useState('');
+  const [sortDirection, setSortDirection] = React.useState('desc'); // 'desc' untuk terbaru dulu
 
   // Ambil daftar kelas unik
   const kelasList = React.useMemo(() => {
@@ -20,15 +21,43 @@ function PelanggaranTabel({ data, onSelectSiswa, onEdit, onDelete }) {
     return matchKelas && matchNama;
   });
 
-  // Sort data by Timestamp descending (newest first)
+  // Fungsi untuk mengubah arah pengurutan
+  const toggleSortDirection = () => {
+    setSortDirection(prev => prev === 'desc' ? 'asc' : 'desc');
+  };
+
+  // Fungsi helper untuk parsing tanggal DD-MM-YYYY HH:MM:SS
+  function parseDate(dateString) {
+    if (!dateString) return new Date(0);
+    
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('-');
+    
+    // Format menjadi YYYY-MM-DDThh:mm:ss yang dipahami JavaScript
+    return new Date(`${year}-${month}-${day}T${timePart || '00:00:00'}`);
+  }
+
+  // Pengurutan data dengan parsing tanggal yang tepat
   const sortedData = [...filteredData].sort((a, b) => {
-    const dateA = new Date(a.Timestamp);
-    const dateB = new Date(b.Timestamp);
-    if (!isNaN(dateA) && !isNaN(dateB)) {
-      return dateB - dateA;
-    }
-    return String(b.Timestamp).localeCompare(String(a.Timestamp));
+    const dateA = parseDate(a.Timestamp);
+    const dateB = parseDate(b.Timestamp);
+    
+    return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
   });
+
+  // Fungsi helper
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date)) return dateString;
+    
+    return date.toLocaleDateString('id-ID', { 
+      day: '2-digit',
+      month: '2-digit', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
 
   return (
     <div>
@@ -58,7 +87,10 @@ function PelanggaranTabel({ data, onSelectSiswa, onEdit, onDelete }) {
           <thead>
             <tr>
               <th style={{ textAlign: 'center', width: '48px' }}>No</th>
-              <th>Tanggal</th>
+              <th onClick={toggleSortDirection} style={{ cursor: 'pointer' }}>
+                Tanggal
+                <span className="sort-indicator">{sortDirection === 'desc' ? '↓' : '↑'}</span>
+              </th>
               <th>NISN</th>
               <th>Nama Siswa</th>
               <th>Kelas</th>
@@ -76,7 +108,7 @@ function PelanggaranTabel({ data, onSelectSiswa, onEdit, onDelete }) {
               sortedData.map((item, idx) => (
                 <tr key={item.ID}>
                   <td style={{ textAlign: 'center' }}>{idx + 1}</td>
-                  <td>{item.Timestamp}</td>
+                  <td>{formatDate(item.Timestamp)}</td>
                   <td>{item.Nisn}</td>
                   <td>{item['Nama Siswa']}</td>
                   <td>{item.Kelas}</td>
