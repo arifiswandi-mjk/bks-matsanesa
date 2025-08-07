@@ -21,7 +21,6 @@ function SiswaDetailPage({ nisn: propNisn }) {
 
   // Gunakan parameter URL atau prop
   const nisn = id || propNisn;
-  console.log('NISN value:', nisn); // Tambahkan ini
 
   useEffect(() => {
     if (!nisn) {
@@ -46,13 +45,10 @@ function SiswaDetailPage({ nisn: propNisn }) {
         });
 
         const json = await res.json();
-        console.log('API Response:', json);
 
         // Respons API adalah array, ambil data siswa dari item pertama
         if (Array.isArray(json) && json.length > 0) {
           const firstItem = json[0];
-          console.log('First item structure:', firstItem);
-          
           setSiswa({
             Nama: firstItem['Nama Siswa'] || firstItem.nama || firstItem.Nama || '', // Tambahkan 'Nama Siswa' dengan format bracket
             Nisn: firstItem.Nisn || firstItem.nisn || nisn,

@@ -35,7 +35,7 @@ function TambahPelanggaranForm({
       setTanggalDipilih(formatted);
       setModeTanggal('manual');
     }
-  }, [modeEdit, dataEdit]);
+  }, [modeEdit, dataEdit, setKelasDipilih, setNamaDipilih, setJenisDipilih, setTanggalDipilih, setModeTanggal]);
 
   return (
     <form className="tambah-pelanggaran-form">
@@ -117,10 +117,10 @@ function TambahPelanggaranForm({
           className=""
           disabled={loadingTambah}
         >
-          <option value="">-- Pilih Jenis --</option>
+          <option value="">-- Pilih Jenis --</option>          
           {jenisList.map(j => (
             <option key={j.ID} value={j.Nama}>
-              {j.ID}. {j.Nama}
+              {j.ID}. {j.Nama}. (Skor {j.Skor})
             </option>
           ))}
         </select>

@@ -47,16 +47,40 @@ function PelanggaranTabel({ data, onSelectSiswa, onEdit }) {
 
   // Fungsi helper
   function formatDate(dateString) {
-    const date = new Date(dateString);
-    if (isNaN(date)) return dateString;
-    
-    return date.toLocaleDateString('id-ID', { 
-      day: '2-digit',
-      month: '2-digit', 
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    try {
+      // Jika dateString kosong
+      if (!dateString) return '';
+      
+      // Untuk tanggal yang sudah dalam format JavaScript Date object
+      let date;
+      
+      // Jika format yang masuk adalah DD-MM-YYYY HH:MM:SS
+      if (dateString.includes('-')) {
+        const [datePart, timePart] = dateString.split(' ');
+        const [day, month, year] = datePart.split('-');
+        date = new Date(`${year}-${month}-${day}T${timePart || '00:00:00'}`);
+      } 
+      // Format lainnya, coba parsing biasa
+      else {
+        date = new Date(dateString);
+      }
+      
+      // Jika parsing sukses, format secara manual ke DD/MM/YYYY
+      if (!isNaN(date)) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        
+        return `${day}/${month}/${year}, ${hours}:${minutes}`;
+      }
+      
+      return dateString;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return dateString;
+    }
   }
 
   return (

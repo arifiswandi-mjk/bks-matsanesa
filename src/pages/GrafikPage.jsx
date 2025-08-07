@@ -36,7 +36,6 @@ function GrafikPage() {
         TotalSkor: parseInt(item.Total || item.total || 0, 10)
       }));
       
-      console.log('Data setelah normalisasi:', normalizedData);
       setRekapData(normalizedData);
     } catch (error) {
       console.error('Gagal memuat data:', error);
@@ -159,10 +158,7 @@ function GrafikPage() {
         const skorValue = d.TotalSkor || d.Total || 0;
         tooltip
           .style('opacity', 1)
-          .html(`<strong>${d.Nama}</strong><br/>Kelas: ${d.Kelas}<br/>Total Skor: <b>${skorValue}</b>`);
-        
-        // Debug: log nilai untuk item yang dihover
-        console.log('Item yang dihover:', d);
+          .html(`<strong>${d.Nama}</strong><br/>Kelas: ${d.Kelas}<br/>Total Skor: <b>${skorValue}</b>`);        
       })
       .on('mousemove', function(event) {
         tooltip
@@ -477,8 +473,6 @@ function GrafikPage() {
   }, [rekapData, loading, uniqueClasses, dataByClass]);
 
   const handleBack = () => {
-    console.log('Back button clicked'); // Tambahkan log untuk debugging
-    
     // Gunakan approach alternatif untuk kembali
     try {
       navigate(-1);
