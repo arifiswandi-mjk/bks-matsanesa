@@ -9,8 +9,8 @@ function RekapPage() {
   const [rekap, setRekap] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [kelasFilter, setKelasFilter] = useState('');
+  const [searchTerm] = useState('');
+  const [kelasFilter] = useState('');
   
   // Fungsi untuk kembali ke halaman sebelumnya
   const handleBack = () => {
@@ -49,7 +49,6 @@ function RekapPage() {
   };
 
   // Ekstrak daftar kelas unik untuk filter
-  const kelasList = [...new Set(rekap.map(item => item.Kelas))].sort();
 
   // Filter data berdasarkan pencarian dan filter kelas
   const filteredData = rekap.filter(item => {
@@ -75,30 +74,7 @@ function RekapPage() {
       
       {/* Pindahkan judul ke bawah tombol */}
       <h2 className="page-title">Rekap Skor Pelanggaran Siswa</h2>
-
-      {!loading && (
-        <div className="search-filter">
-          <input
-            type="text"
-            placeholder="Cari nama atau NISN..."
-            className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          
-          <select 
-            className="filter-select"
-            value={kelasFilter}
-            onChange={(e) => setKelasFilter(e.target.value)}
-          >
-            <option value="">Semua Kelas</option>
-            {kelasList.map(kelas => (
-              <option key={kelas} value={kelas}>{kelas}</option>
-            ))}
-          </select>
-        </div>
-      )}
-
+   
       {loading ? (
         <div className="loading-message">⏳ Memuat data...</div>
       ) : rekap.length === 0 ? (
