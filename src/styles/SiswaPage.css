@@ -1,0 +1,488 @@
+/* Modern Responsive Design for SiswaPage */
+:root {
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --primary-light: #eef2ff;
+  --accent: #ff9f1c;
+  --success: #2ec4b6;
+  --danger: #e71d36;
+  --warning: #ff9f1c;
+  --info: #4cc9f0;
+  --text-dark: #2b2d42;
+  --text-medium: #555b6e;
+  --text-light: #8d99ae;
+  --background: #f8f9fa;
+  --border: #dee2e6;
+  --card: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --transition: all 0.3s ease;
+}
+
+/* Base Styles */
+.siswa-page {
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.siswa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.siswa-header h1 {
+  color: var(--primary);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.siswa-header h1::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 24px;
+  background-color: var(--accent);
+  margin-right: 12px;
+  border-radius: 3px;
+}
+
+.logout-button {
+  background-color: var(--danger);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout-button:hover {
+  background-color: #d11a30;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(231, 29, 54, 0.25);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}
+
+/* Student Info Card */
+.siswa-info {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  padding: 1.75rem;
+  border-radius: var(--radius-lg);
+  color: white;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+}
+
+.siswa-info::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.siswa-info h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.siswa-info p {
+  margin: 0.5rem 0;
+  font-size: 1.05rem;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.siswa-info p::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+/* Content Cards */
+.siswa-content {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.siswa-card {
+  background-color: var(--card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.siswa-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.siswa-card h3 {
+  margin: 0;
+  padding: 1.5rem;
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.siswa-card h3::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background-color: var(--primary);
+  margin-right: 12px;
+  border-radius: 2px;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: var(--text-medium);
+}
+
+.detail-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  color: var(--text-medium);
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(67, 97, 238, 0.2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* No Data Message */
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  color: var(--text-medium);
+  text-align: center;
+}
+
+.no-data-icon {
+  color: var(--success);
+  margin-bottom: 1.25rem;
+}
+
+.no-data h4 {
+  font-size: 1.35rem;
+  margin: 0 0 0.75rem 0;
+  color: var(--text-dark);
+}
+
+.no-data p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-medium);
+  max-width: 300px;
+  line-height: 1.5;
+}
+
+/* Pelanggaran Table */
+.pelanggaran-table-container {
+  padding: 0 1rem 1.5rem;
+}
+
+.pelanggaran-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+
+.pelanggaran-table th,
+.pelanggaran-table td {
+  padding: 1rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.pelanggaran-table th {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pelanggaran-table th:first-child {
+  border-top-left-radius: var(--radius-sm);
+}
+
+.pelanggaran-table th:last-child {
+  border-top-right-radius: var(--radius-sm);
+}
+
+.pelanggaran-table td:first-child {
+  font-weight: 600;
+  color: var(--text-medium);
+  text-align: center;
+  width: 50px;
+}
+
+.row-even {
+  background-color: white;
+}
+
+.row-odd {
+  background-color: #fafbff;
+}
+
+.pelanggaran-table tr:hover {
+  background-color: #f0f4ff;
+}
+
+.poin-cell {
+  font-weight: 600;
+  color: var(--danger);
+  text-align: center;
+  width: 80px;
+}
+
+.pelanggaran-table tfoot {
+  font-weight: 600;
+}
+
+.pelanggaran-table tfoot tr {
+  background-color: #f8f9fa;
+}
+
+.total-label {
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.total-poin {
+  font-weight: 700;
+  color: var(--danger);
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Summary Cards */
+.pelanggaran-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.summary-item {
+  background-color: white;
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.summary-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.summary-label {
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-value.warning {
+  color: var(--danger);
+}
+
+.summary-value svg {
+  margin-right: 6px;
+}
+
+.status-danger {
+  background-color: #ffefef;
+  color: var(--danger);
+  padding: 0.3rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-safe {
+  background-color: #e6fbf8;
+  color: var(--success);
+  padding: 0.3rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .siswa-page {
+    padding: 1rem;
+  }
+
+  .siswa-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .siswa-info {
+    padding: 1.25rem;
+  }
+  
+  .siswa-info h2 {
+    font-size: 1.3rem;
+  }
+  
+  .pelanggaran-table-container {
+    overflow-x: auto;
+    margin: 0;
+    padding: 0.75rem;
+  }
+  
+  .pelanggaran-table {
+    min-width: 600px;
+  }
+  
+  .pelanggaran-summary {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+  
+  .summary-value {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .siswa-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .logout-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .siswa-info h2 {
+    font-size: 1.25rem;
+  }
+  
+  .siswa-info p {
+    font-size: 1rem;
+  }
+  
+  .siswa-card h3 {
+    font-size: 1.1rem;
+    padding: 1.25rem 1rem;
+  }
+  
+  .pelanggaran-table th,
+  .pelanggaran-table td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .pelanggaran-summary {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-item {
+    padding: 1rem;
+  }
+}

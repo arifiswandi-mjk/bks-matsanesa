@@ -14,7 +14,8 @@ function doPost(e) {
     readJenis,
     deleteJenis,
     rekapPelanggaran,
-    readPelanggaranByNisn // ✅ fungsi baru
+    readPelanggaranByNisn,
+    readSiswaByNisn // ✅ tambahkan fungsi baru
   };
 // Update data pelanggaran berdasarkan ID
 function updatePelanggaran(data) {
@@ -140,7 +141,7 @@ function readPelanggaran(data) {
 }
 
 function readPelanggaranByNisn(data) {
-  if (!data.nisn) return { error: "NISN kosong" };
+  if (!data.nisn) return { status: 'error', error: "NISN kosong" };
 
   const sheet = getSheet("Pelanggaran");
   const rows = sheet.getDataRange().getValues();
@@ -186,6 +187,30 @@ function readSiswa() {
     Nama: row[1],
     Kelas: row[2]
   }));
+}
+
+function readSiswaByNisn(data) {
+  if (!data.nisn) return { status: 'error', message: 'NISN kosong' };
+
+  const sheet = getSheet("Siswa");
+  const rows = sheet.getDataRange().getValues();
+  
+  // Cari data siswa dengan NISN yang cocok (NISN ada di kolom 0)
+  for (let i = 1; i < rows.length; i++) {
+    if (rows[i][0] == data.nisn) {
+      return {
+        status: 'success',
+        siswa: {
+          Nisn: rows[i][0],
+          Nama: rows[i][1],
+          Kelas: rows[i][2]
+        }
+      };
+    }
+  }
+  
+  // Jika tidak ditemukan
+  return { status: 'error', message: 'Siswa tidak ditemukan' };
 }
 
 function createJenis(data) {
